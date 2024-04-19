@@ -4,12 +4,10 @@ import server from "./server.js";
 server.listen(3000, () => {
 
     const createWindow = () => {
-        const win = new BrowserWindow({
-            width: 1280,
-            height: 720
-        });
+        const win = new BrowserWindow({});
     
         win.loadURL('http://localhost:3000');
+        win.maximize();
     }
     
     app.whenReady().then(() => {

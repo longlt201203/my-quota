@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 const Container = styled.table`
     font-family: ${props => props.theme.font.normalText};
+    width: 100%;
     /* border: 1px solid; */
 `;
 
@@ -18,6 +19,7 @@ export interface TableRowProps {
 
 const Row = styled.tr<TableRowProps>`
     border-bottom: 1px solid ${props => props.theme.color.dark.original};
+    background-color: white;
 
     ${props => props.header && `font-weight: bold;`}
     ${props => props.header && `background-color: ${props.theme.color.primary.original};`}

@@ -12,7 +12,9 @@ const QuoteBlockContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     row-gap: 24px;
+    width: 100%;
 `;
 
 const Quote = styled(Typography.Quote)`
