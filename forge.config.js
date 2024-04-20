@@ -7,7 +7,7 @@ export default {
   packagerConfig: {
     asar: true,
     icon: path.join(process.cwd(), 'icons', 'icon'),
-    ignore: [".env", "wininstaller", "out"]
+    ignore: [".env", "wininstaller"]
   },
   makers: [
     {
