@@ -29,6 +29,7 @@ const Icons = {
     EditIcon: (props: IconProps) => <Icon {...props} className={`fa-regular fa-pen-to-square ${IconSizeMap[props.size || "medium"]}`}></Icon>,
     TrashCanIcon: (props: IconProps) => <Icon {...props} className={`fa-regular fa-trash-can ${IconSizeMap[props.size || "medium"]}`}></Icon>,
     CheckIcon: (props: IconProps) => <Icon {...props} className={`fa-regular fa-circle-check ${IconSizeMap[props.size || "medium"]}`}></Icon>,
+    BanIcon: (props: IconProps) => <Icon {...props} className={`fa-solid fa-ban ${IconSizeMap[props.size || "medium"]}`}></Icon>,
 };
 
 export default Icons;

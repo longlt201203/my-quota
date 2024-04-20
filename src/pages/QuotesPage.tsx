@@ -5,21 +5,12 @@ import Icons from "../components/Icon";
 import Table from "../components/Table";
 import { useNavigate } from "react-router-dom";
 import TextInput from "../components/TextInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Quote } from "../etc/quotes";
-
-const mockData = [
-    {
-        id: 1,
-        author: "Le Thanh Long",
-        content: "Họ cười tôi vì tôi không giống họ. Tôi cười họ vì họ không giống tôi."
-    },
-    {
-        id: 2,
-        author: "Le Thanh Long",
-        content: "Họ cười tôi vì tôi không giống họ. Tôi cười họ vì họ không giống tôi."
-    }
-];
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import { fetchQuotes, getQuotes } from "../redux/quotes.reducer";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const ButtonGroupContainer = styled.div`
     display: flex;
@@ -53,7 +44,60 @@ const QuotesPageContainer = styled.div`
 
 export default function QuotesPage() {
     const navigate = useNavigate();
+    const [newQuote, setNewQuote] = useState<Quote | null>(null);
     const [editingQuote, setEditingQuote] = useState<Quote | null>(null);
+
+    const dispatch = useAppDispatch();
+    const quotes = useAppSelector(getQuotes);
+
+    useEffect(() => {
+        dispatch(fetchQuotes());
+    }, []);
+
+    const handleAddQuote = () => {
+        setNewQuote({ id: 0, content: "", author: "" });
+    }
+
+    const postQuote = () => {
+        axios
+            .post("/api/quotes", newQuote)
+            .then(() => {
+                toast.success("Add new quote successfully!");
+                dispatch(fetchQuotes());
+            })
+            .catch((err) => {
+                console.log(err);
+                toast.error("Server error!");
+            });
+        setNewQuote(null);
+    }
+
+    const updateQuote = () => {
+        axios
+            .put("/api/quotes", editingQuote)
+            .then(() => {
+                toast.success("Update quote successfully!");
+                dispatch(fetchQuotes());
+            })
+            .catch((err) => {
+                console.log(err);
+                toast.error("Server error!");
+            });
+        setEditingQuote(null);
+    }
+
+    const deleteQuote = (id: number) => {
+        axios
+            .delete("/api/quotes/" + id)
+            .then(() => {
+                toast.success("Delete quote successfully!");
+                dispatch(fetchQuotes());
+            })
+            .catch((err) => {
+                console.log(err);
+                toast.error("Server error!");
+            });
+    }
 
     return (
         <QuotesPageContainer>
@@ -63,7 +107,7 @@ export default function QuotesPage() {
             </ButtonGroupContainer>
             <TableAndControlsContainer>
                 <TableControlsContainer>
-                    <Button variant="primary">+ Add Quote</Button>
+                    <Button variant="primary" onClick={() => handleAddQuote()}>+ Add Quote</Button>
                 </TableControlsContainer>
                 <Table.Container>
                     <Table.Row header>
@@ -72,22 +116,38 @@ export default function QuotesPage() {
                         <Table.Item>Content</Table.Item>
                         <Table.Item>Actions</Table.Item>
                     </Table.Row>
-                    {mockData.map(item => (
-                        <Table.Row key={item.id}>
-                            <Table.Item>{item.id}</Table.Item>
+                    {newQuote && (
+                        <Table.Row>
+                            <Table.Item>{newQuote.id}</Table.Item>
                             <Table.Item>
-                                {editingQuote && editingQuote.id == item.id ? <TextInput type="text" value={editingQuote.author} onChange={(e) => setEditingQuote({...editingQuote, author: e.target.value})} /> : item.author}
+                                <TextInput type="text" value={newQuote.author} onChange={(e) => setNewQuote({ ...newQuote, author: e.target.value })} />
                             </Table.Item>
                             <Table.Item>
-                                {editingQuote && editingQuote.id == item.id ? <TextInput type="text" value={editingQuote.content} onChange={(e) => setEditingQuote({...editingQuote, content: e.target.value})} /> : item.content}
+                                <TextInput type="text" value={newQuote.content} onChange={(e) => setNewQuote({ ...newQuote, content: e.target.value })} />
                             </Table.Item>
                             <Table.Item>
                                 <ActionButtonContainer>
-                                    <Button onClick={() => editingQuote && editingQuote.id == item.id ? setEditingQuote(null) : setEditingQuote(item)}>
+                                    <Button variant="primary" onClick={() => postQuote()}><Icons.CheckIcon variant="dangerText" /></Button>
+                                    <Button variant="danger" onClick={() => setNewQuote(null)}><Icons.BanIcon variant="dangerText" /></Button>
+                                </ActionButtonContainer>
+                            </Table.Item>
+                        </Table.Row>
+                    )}
+                    {quotes && quotes.map((item, index) => (
+                        <Table.Row key={item.id}>
+                            <Table.Item>{index+1}</Table.Item>
+                            <Table.Item>
+                                {editingQuote && editingQuote.id == item.id ? <TextInput type="text" value={editingQuote.author} onChange={(e) => setEditingQuote({ ...editingQuote, author: e.target.value })} /> : item.author}
+                            </Table.Item>
+                            <Table.Item>
+                                {editingQuote && editingQuote.id == item.id ? <TextInput type="text" value={editingQuote.content} onChange={(e) => setEditingQuote({ ...editingQuote, content: e.target.value })} /> : item.content}
+                            </Table.Item>
+                            <Table.Item>
+                                <ActionButtonContainer>
+                                    <Button onClick={() => editingQuote && editingQuote.id == item.id ? updateQuote() : setEditingQuote(item)}>
                                         {editingQuote && editingQuote.id == item.id ? <Icons.CheckIcon variant="primaryText" /> : <Icons.EditIcon variant="primaryText" />}
-                                        
                                     </Button>
-                                    <Button variant="danger"><Icons.TrashCanIcon variant="dangerText" /></Button>
+                                    <Button variant="danger" onClick={() => deleteQuote(item.id)}><Icons.TrashCanIcon variant="dangerText" /></Button>
                                 </ActionButtonContainer>
                             </Table.Item>
                         </Table.Row>

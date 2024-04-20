@@ -1,7 +1,11 @@
 import express from "express";
+import router from "./apis/router.js";
 
-const server = express();
+export default function createHttpServer(staticFolder) {
+    const server = express();
+    
+    server.use(express.static(staticFolder));
+    server.use("/api", router);
 
-server.use(express.static("dist"));
-
-export default server;
+    return server;
+}
