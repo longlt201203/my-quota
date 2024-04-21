@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "My Quota"
-#define MyAppVersion "v1.0.0"
+#define MyAppVersion "1.0.0"
 #define MyAppPublisher "Le Thanh Long [longlt201203@gmail.com]"
 #define MyAppExeName "my-quota-app.exe"
 
