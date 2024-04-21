@@ -1,7 +1,7 @@
 {
   "name": "my-quota-app",
   "private": true,
-  "version": "1.0.0-beta",
+  "version": "v1.0.0",
   "type": "module",
   "main": "app/electron.js",
   "scripts": {
