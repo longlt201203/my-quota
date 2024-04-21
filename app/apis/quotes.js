@@ -4,14 +4,13 @@ import db from "../db.js";
 const QuotesRouter = Router();
 
 QuotesRouter.get("/random", (req, res) => {
-    const quotes = db.getQuotes();
-    const index = Math.floor(Math.random() * quotes.length);
-    res.status(200).send(quotes[index]);
+    const quote = db.getRandomQuote();
+    res.status(200).send(quote);
 });
 
 QuotesRouter.get("/", (req, res) => {
     const query = req.query;
-    const page = parseInt(query.page || "0");
+    const page = parseInt(query.page || "1");
     res.status(200).send(db.getQuotes(page));
 });
 

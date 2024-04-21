@@ -41,6 +41,7 @@ const Button = styled.button<ButtonProps>`
     font-family: ${props => props.theme.font.normalText};
     border: none;
     border-radius: 4px;
+    transition: all .3s ease-in;
     ${props => ButtonCss[props.variant || "primary"]}
     ${props => ButtonCss[props.size || "medium"]}
 

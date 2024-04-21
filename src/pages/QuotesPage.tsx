@@ -6,12 +6,12 @@ import Table from "../components/Table";
 import { useNavigate } from "react-router-dom";
 import TextInput from "../components/TextInput";
 import { useEffect, useState } from "react";
-import { Quote } from "../etc/quotes";
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { fetchQuotes, getQuotes } from "../redux/quotes.reducer";
+import { fetchQuotes, getQuotesData } from "../redux/quotes.reducer";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Pagination from "../components/Pagination";
+import { Quote } from "../etc/types";
 
 const ButtonGroupContainer = styled.div`
     display: flex;
@@ -52,12 +52,13 @@ export default function QuotesPage() {
     const navigate = useNavigate();
     const [newQuote, setNewQuote] = useState<Quote | null>(null);
     const [editingQuote, setEditingQuote] = useState<Quote | null>(null);
+    const [currentPage, setCurrentPage] = useState<number>(1);
 
     const dispatch = useAppDispatch();
-    const quotes = useAppSelector(getQuotes);
+    const quotesData = useAppSelector(getQuotesData);
 
     useEffect(() => {
-        dispatch(fetchQuotes());
+        dispatch(fetchQuotes(currentPage));
     }, []);
 
     const handleAddQuote = () => {
@@ -69,7 +70,7 @@ export default function QuotesPage() {
             .post("/api/quotes", newQuote)
             .then(() => {
                 toast.success("Add new quote successfully!");
-                dispatch(fetchQuotes());
+                dispatch(fetchQuotes(currentPage));
             })
             .catch((err) => {
                 console.log(err);
@@ -83,7 +84,7 @@ export default function QuotesPage() {
             .put("/api/quotes", editingQuote)
             .then(() => {
                 toast.success("Update quote successfully!");
-                dispatch(fetchQuotes());
+                dispatch(fetchQuotes(currentPage));
             })
             .catch((err) => {
                 console.log(err);
@@ -97,12 +98,17 @@ export default function QuotesPage() {
             .delete("/api/quotes/" + id)
             .then(() => {
                 toast.success("Delete quote successfully!");
-                dispatch(fetchQuotes());
+                dispatch(fetchQuotes(currentPage));
             })
             .catch((err) => {
                 console.log(err);
                 toast.error("Server error!");
             });
+    }
+
+    const changePage = (page: number) => {
+        dispatch(fetchQuotes(page));
+        setCurrentPage(page);
     }
 
     return (
@@ -139,9 +145,9 @@ export default function QuotesPage() {
                             </Table.Item>
                         </Table.Row>
                     )}
-                    {/* {quotes && quotes.map((item, index) => (
+                    {quotesData.data.map((item) => (
                         <Table.Row key={item.id}>
-                            <Table.Item>{index+1}</Table.Item>
+                            <Table.Item>{item.id}</Table.Item>
                             <Table.Item>
                                 {editingQuote && editingQuote.id == item.id ? <TextInput type="text" value={editingQuote.author} onChange={(e) => setEditingQuote({ ...editingQuote, author: e.target.value })} /> : item.author}
                             </Table.Item>
@@ -157,10 +163,16 @@ export default function QuotesPage() {
                                 </ActionButtonContainer>
                             </Table.Item>
                         </Table.Row>
-                    ))} */}
+                    ))}
                 </Table.Container>
                 <PaginationBufferContainer>
-                    <Pagination start={1} end={10} current={5} />
+                    <Pagination 
+                        start={1} 
+                        end={quotesData.totalPages} 
+                        current={currentPage} 
+                        onChange={(newPage) => changePage(newPage)} 
+                        onNext={() => changePage(currentPage+1)}
+                        onPrev={() => changePage(currentPage-1)} />
                 </PaginationBufferContainer>
             </TableAndControlsContainer>
         </QuotesPageContainer>
