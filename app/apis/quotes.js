@@ -10,7 +10,9 @@ QuotesRouter.get("/random", (req, res) => {
 });
 
 QuotesRouter.get("/", (req, res) => {
-    res.status(200).send(db.getQuotes());
+    const query = req.query;
+    const page = parseInt(query.page || "0");
+    res.status(200).send(db.getQuotes(page));
 });
 
 QuotesRouter.post("/", (req, res) => {

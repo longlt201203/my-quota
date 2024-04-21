@@ -30,6 +30,8 @@ const Icons = {
     TrashCanIcon: (props: IconProps) => <Icon {...props} className={`fa-regular fa-trash-can ${IconSizeMap[props.size || "medium"]}`}></Icon>,
     CheckIcon: (props: IconProps) => <Icon {...props} className={`fa-regular fa-circle-check ${IconSizeMap[props.size || "medium"]}`}></Icon>,
     BanIcon: (props: IconProps) => <Icon {...props} className={`fa-solid fa-ban ${IconSizeMap[props.size || "medium"]}`}></Icon>,
+    AngleLeftIcon: (props: IconProps) => <Icon {...props} className={`fa-solid fa-angle-left ${IconSizeMap[props.size || "medium"]}`}></Icon>,
+    AngleRightIcon: (props: IconProps) => <Icon {...props} className={`fa-solid fa-angle-right ${IconSizeMap[props.size || "medium"]}`}></Icon>,
 };
 
 export default Icons;

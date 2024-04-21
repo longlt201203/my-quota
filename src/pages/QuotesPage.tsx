@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "../redux/store";
 import { fetchQuotes, getQuotes } from "../redux/quotes.reducer";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Pagination from "../components/Pagination";
 
 const ButtonGroupContainer = styled.div`
     display: flex;
@@ -40,6 +41,11 @@ const QuotesPageContainer = styled.div`
     padding: 64px;
     align-items: center;
     row-gap: 64px;
+`;
+
+const PaginationBufferContainer = styled.div`
+    display: flex;
+    justify-content: center;
 `;
 
 export default function QuotesPage() {
@@ -133,7 +139,7 @@ export default function QuotesPage() {
                             </Table.Item>
                         </Table.Row>
                     )}
-                    {quotes && quotes.map((item, index) => (
+                    {/* {quotes && quotes.map((item, index) => (
                         <Table.Row key={item.id}>
                             <Table.Item>{index+1}</Table.Item>
                             <Table.Item>
@@ -151,8 +157,11 @@ export default function QuotesPage() {
                                 </ActionButtonContainer>
                             </Table.Item>
                         </Table.Row>
-                    ))}
+                    ))} */}
                 </Table.Container>
+                <PaginationBufferContainer>
+                    <Pagination start={1} end={10} current={5} />
+                </PaginationBufferContainer>
             </TableAndControlsContainer>
         </QuotesPageContainer>
     );

@@ -9,20 +9,24 @@ export const fetchRandomQuote = createAsyncThunk("quotes/fecthRandomQuote", asyn
     return res.data;
 });
 
-export const fetchQuotes = createAsyncThunk("quotes/fecthQuotes", async () => {
+export const fetchQuotes = createAsyncThunk("quotes/fecthQuotes", async (page: number) => {
     console.log("fetchRandomQuote");
-    const res = await axios.get<Quote[]>("/api/quotes/");
+    const res = await axios.get<Quote[]>("/api/quotes/?page="+page);
     return res.data;
 });
 
 export interface QuotesState {
     randomQuote: Quote | null;
     quotes: Quote[];
+    page: number;
+    totalPages: number;
 }
 
 const initialState: QuotesState = {
     randomQuote: null,
-    quotes: []
+    quotes: [],
+    page: 1,
+    totalPages: 0
 }
 
 export const quotesSlice = createSlice({

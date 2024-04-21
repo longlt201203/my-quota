@@ -5,7 +5,7 @@ import Typography from "../components/Typography";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { fetchRandomQuote, getRandomQuote } from "../redux/quotes.reducer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const ButtonGroupContainer = styled.div`
     display: flex;
@@ -28,20 +28,32 @@ const HomeContainer = styled.div`
     row-gap: 64px;
 `;
 
+const animations = ["bounceIn", "fadeInDown", "flipInX", "flipInY", "zoomIn", "slideInUp"];
+
 export default function Home() {
     const navigate = useNavigate();
 
     const randomQuote = useAppSelector(getRandomQuote);
     const dispatch = useAppDispatch();
 
+    const [index, setIndex] = useState<number>(0);
+
     useEffect(() => {
         dispatch(fetchRandomQuote());
     }, []);
 
+    useEffect(() => {
+        if (index+1 < animations.length) {
+            setIndex(prev => prev+1);
+        } else {
+            setIndex(0);
+        }
+    }, [randomQuote]);
+
     return (
         <HomeContainer>
             <Typography.Display>My <IconSpan>Q</IconSpan>uota</Typography.Display>
-            {randomQuote && <QuoteBlock quote={randomQuote.content} author={randomQuote.author} />}
+            {randomQuote && <QuoteBlock quote={randomQuote.content} author={randomQuote.author} containerProps={{ animation: animations[index] }} />}
             <ButtonGroupContainer>
                 <Button variant="primary" onClick={() => dispatch(fetchRandomQuote())}>Randomize</Button>
                 <Button variant="secondary" onClick={() => navigate("/quotes")}>Manage Quotes</Button>
