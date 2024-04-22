@@ -145,8 +145,8 @@ export default function QuotesPage() {
                             </Table.Item>
                         </Table.Row>
                     )}
-                    {quotesData.data.map((item) => (
-                        <Table.Row key={item.id}>
+                    {quotesData.data.map((item, index) => (
+                        <Table.Row key={index}>
                             <Table.Item>{item.id}</Table.Item>
                             <Table.Item>
                                 {editingQuote && editingQuote.id == item.id ? <TextInput type="text" value={editingQuote.author} onChange={(e) => setEditingQuote({ ...editingQuote, author: e.target.value })} /> : item.author}

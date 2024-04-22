@@ -22,7 +22,7 @@ function Db() {
             return returnData;
         },
         addQuote: (quote) => {
-            quote.id = quotes.length > 0 ? quotes[quotes.length-1].id+1 : 1;
+            quote.id = quotes.length > 0 ? quotes[0].id+1 : 1;
             quotes.unshift(quote);
 
             fs.writeFileSync("quotes.json", JSON.stringify(quotes));
